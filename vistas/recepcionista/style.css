@@ -1,0 +1,172 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #1a252f;
+    color: #fff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #f4a261;
+}
+
+main {
+    padding: 40px;
+    text-align: center;
+}
+
+main h2 {
+    color: #264653;
+    font-size: 28px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+main h3 {
+    color: #2a9d8f;
+    font-size: 22px;
+    margin-top: 30px;
+    position: relative;
+}
+
+main h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background-color: #e76f51;
+}
+
+.reservations-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.reservation-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: slideUp 0.5s ease-out;
+}
+
+.reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-card h4 {
+    font-size: 18px;
+    color: #264653;
+    margin-bottom: 10px;
+}
+
+.reservation-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-buttons button {
+    background-color: #e76f51;
+    border: none;
+    padding: 8px 16px;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.action-buttons button:hover {
+    background-color: #f4a261;
+    transform: scale(1.05);
+}
+
+.cancel-btn {
+    background-color: #e63946;
+}
+
+.cancel-btn:hover {
+    background-color: #d00000;
+}
+
+.notification {
+    position: fixed;
+    top: 80px; /* Ajustado para que no tape el header */
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 14px;
+    z-index: 900; /* Menor que el header para que no interfiera */
+    animation: slideInRight 0.5s ease-in, fadeOut 3s 2s forwards;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.notification.success {
+    background-color: #2a9d8f;
+}
+
+.notification.error {
+    background-color: #e63946;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

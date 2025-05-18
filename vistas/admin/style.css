@@ -1,0 +1,205 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #1a252f;
+    color: #fff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #f4a261;
+}
+
+main {
+    padding: 40px;
+    text-align: center;
+}
+
+main h2 {
+    color: #264653;
+    font-size: 28px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+main h3 {
+    color: #2a9d8f;
+    font-size: 22px;
+    margin-top: 30px;
+    position: relative;
+}
+
+main h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background-color: #e76f51;
+}
+
+main h4 {
+    color: #264653;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.admin-section {
+    margin-bottom: 40px;
+}
+
+.form-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button[type="submit"] {
+    background-color: #e76f51;
+    border: none;
+    padding: 12px 24px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    transform: scale(1.05);
+    background-color: #f4a261;
+}
+
+.list-section {
+    margin-top: 20px;
+}
+
+.rooms-list, .users-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.room-card, .user-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.room-card:hover, .user-card:hover {
+    transform: translateY(-5px);
+}
+
+.room-card h4, .user-card h4 {
+    font-size: 18px;
+    color: #2a9d8f;
+    margin-bottom: 10px;
+}
+
+.room-card p, .user-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.edit-btn {
+    background-color: #2a9d8f;
+    border: none;
+    padding: 8px 16px;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #219653;
+}
+
+.delete-btn {
+    background-color: #e63946;
+    border: none;
+    padding: 8px 16px;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #d00000;
+}
+
+.error-message {
+    color: #e63946;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.success-message {
+    color: #2a9d8f;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
