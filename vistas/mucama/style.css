@@ -65,6 +65,52 @@ main h3::after {
     background-color: #e76f51;
 }
 
+main section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto 20px;
+}
+
+main section form div {
+    display: flex;
+    flex-direction: column;
+}
+
+main section form label {
+    margin-bottom: 5px;
+    color: #264653;
+}
+
+main section form select,
+main section form textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+main section form textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+main section form button {
+    background-color: #e76f51;
+    border: none;
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+main section form button:hover {
+    background-color: #f4a261;
+}
+
 .tasks-list {
     display: flex;
     justify-content: center;

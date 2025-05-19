@@ -19,17 +19,21 @@ class Conexion {
     }
 
     public function consultaActualizar($sql) {
-        return $this->conexion->query($sql);
+        $result = $this->conexion->query($sql);
+        if (!$result) {
+            error_log("Error en consultaActualizar: " . $this->conexion->error);
+        }
+        return $result;
     }
 
     public function consultaTabla($sql) {
-        $resultado = $this->conexion->query($sql);
-        return $resultado->fetch_all(MYSQLI_ASSOC);
+        $result = $this->conexion->query($sql);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     public function consultaFila($sql) {
-        $resultado = $this->conexion->query($sql);
-        return $resultado->fetch_assoc();
+        $result = $this->conexion->query($sql);
+        return $result ? $result->fetch_assoc() : null;
     }
 
     public function getLastInsertId() {
@@ -37,7 +41,8 @@ class Conexion {
     }
 
     public function cerrar() {
-        $this->conexion->close();
+        if ($this->conexion) {
+            $this->conexion->close();
+        }
     }
 }
-?>

@@ -1,140 +1,205 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
     overflow-x: hidden;
+    line-height: 1.6;
 }
 
 header {
-    background-color: #1a252f;
+    background: linear-gradient(90deg, #1a252f, #2a4066);
     color: #fff;
-    padding: 15px 30px;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
-    margin-left: 20px;
-    transition: color 0.3s;
+    margin-left: 25px;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 nav a:hover {
     color: #f4a261;
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 main {
-    padding: 40px;
+    padding: 50px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
     text-align: center;
 }
 
 main h2 {
-    color: #264653;
-    font-size: 28px;
-    margin-bottom: 20px;
-    animation: fadeIn 1s ease-in;
+    color: #2a4066;
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    animation: fadeIn 1s ease-in-out;
 }
 
 main h3 {
     color: #2a9d8f;
-    font-size: 22px;
-    margin-top: 30px;
+    font-size: 24px;
+    margin-top: 40px;
     position: relative;
+    font-weight: 600;
 }
 
 main h3::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 3px;
+    width: 50px;
+    height: 4px;
     background-color: #e76f51;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+main h3:hover::after {
+    width: 70px;
 }
 
 .admin-section {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .form-section, .list-section, .report-list {
-    background: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 1200px;
-    margin: 0 auto 20px;
+    margin: 20px 0;
 }
 
-table {
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+}
+
+.form-group label {
+    color: #2a4066;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px;
+    border: 2px solid #e0e7f0;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2a9d8f;
+    outline: none;
+    box-shadow: 0 0 8px rgba(42, 157, 143, 0.2);
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     width: 100%;
-    border-collapse: collapse;
+    max-width: 200px;
+    margin: 10px auto;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.rooms-list, .users-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
     margin-top: 20px;
 }
 
-th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #2a9d8f;
-    color: #fff;
-}
-
-td {
-    color: #555;
-}
-
-.room-card, .user-card, .task-card {
+.room-card, .user-card {
     background: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
-    transition: transform 0.3s;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.room-card:hover, .user-card:hover, .task-card:hover {
+.room-card:hover, .user-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-.action-buttons button, .task-card button {
-    background-color: #e76f51;
-    border: none;
-    padding: 8px 16px;
-    color: #fff;
+.room-card h4, .user-card h4 {
+    color: #2a4066;
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.room-card p, .user-card p {
+    color: #555;
     font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px 0;
 }
 
-.action-buttons button:hover, .task-card button:hover {
-    background-color: #f4a261;
-    transform: scale(1.05);
-}
-
-.cancel-btn {
-    background-color: #e63946;
-}
-
-.cancel-btn:hover {
-    background-color: #d00000;
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
 }
 
 .edit-btn {
@@ -153,17 +218,42 @@ td {
     background-color: #d00000;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e7f0;
+}
+
+th {
+    background-color: #2a9d8f;
+    color: #fff;
+    font-weight: 600;
+}
+
+td {
+    color: #555;
+}
+
 .notification {
     position: fixed;
-    top: 80px;
+    top: 100px;
     right: 20px;
-    padding: 15px 20px;
-    border-radius: 5px;
+    padding: 15px 25px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 14px;
-    z-index: 900;
-    animation: slideInRight 0.5s ease-in, fadeOut 3s 2s forwards;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease-out, fadeOut 4s 2.5s forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .notification.success {
@@ -175,13 +265,8 @@ td {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInRight {
@@ -192,4 +277,39 @@ td {
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    nav a {
+        margin: 10px 0;
+    }
+
+    main {
+        padding: 20px 10px;
+    }
+
+    .rooms-list, .users-list {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 10px 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
 }
