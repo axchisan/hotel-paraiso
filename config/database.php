@@ -1,6 +1,6 @@
 <?php
 class Conexion {
-    private $host = '127.0.0.1';
+    private $host = 'localhost';
     private $usuario = 'root';
     private $contrasena = '';
     private $base_datos = 'hotel_paraiso';
