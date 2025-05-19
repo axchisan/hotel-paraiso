@@ -32,6 +32,10 @@ class Conexion {
         return $resultado->fetch_assoc();
     }
 
+    public function getLastInsertId() {
+        return $this->conexion->insert_id;
+    }
+
     public function cerrar() {
         $this->conexion->close();
     }

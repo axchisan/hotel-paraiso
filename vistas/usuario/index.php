@@ -46,20 +46,32 @@ $mis_reservas = $habitacion->getMisReservas($_SESSION['usuario_id']);
                                     <h4><?php echo $hab['numero'] . ' - ' . $hab['tipo']; ?></h4>
                                     <p>Precio: $<?php echo $hab['precio']; ?>/noche</p>
                                     <p>Capacidad: <?php echo $hab['capacidad']; ?> personas</p>
-                                    <button class="reserve-btn" data-habitacion-id="<?php echo $hab['id']; ?>">Seleccionar</button>
+                                    <button class="reserve-btn" data-habitacion-id="<?php echo $hab['id']; ?>" 
+                                            data-numero="<?php echo $hab['numero']; ?>" 
+                                            data-tipo="<?php echo $hab['tipo']; ?>" 
+                                            data-precio="<?php echo $hab['precio']; ?>" 
+                                            data-capacidad="<?php echo $hab['capacidad']; ?>">Seleccionar</button>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#10094;</button>
-                    <button class="carousel-btn next" onclick="moveCarousel(1)">&#10095;</button>
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
                 <?php endif; ?>
             </div>
         </section>
 
         <section class="reservation-section">
             <h3>Hacer una Reserva</h3>
-            <form id="reservation-form" action="procesar_reserva.php" method="POST">
+            <div id="selected-room" class="selected-room" style="display: none;">
+                <h4>Habitación Seleccionada</h4>
+                <p><strong>Número:</strong> <span id="selected-numero"></span></p>
+                <p><strong>Tipo:</strong> <span id="selected-tipo"></span></p>
+                <p><strong>Precio:</strong> $<span id="selected-precio"></span>/noche</p>
+                <p><strong>Capacidad:</strong> <span id="selected-capacidad"></span> personas</p>
+                <button id="deselect-room" class="deselect-btn">Deseleccionar</button>
+            </div>
+            <form id="reservation-form" method="POST">
                 <input type="hidden" id="selected-habitacion" name="habitacion_id">
                 <div class="form-group">
                     <label for="fecha_entrada">Fecha de Entrada:</label>
@@ -88,26 +100,17 @@ $mis_reservas = $habitacion->getMisReservas($_SESSION['usuario_id']);
                             <p>Total Estimado: $<?php echo $reserva['precio'] * (strtotime($reserva['fecha_salida']) - strtotime($reserva['fecha_entrada'])) / (60 * 60 * 24); ?></p>
                             <p>Estado: <?php echo $reserva['estado']; ?></p>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
         </section>
     </main>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Confirmar Selección</h3>
-            <p>¿Desea reservar esta habitación?</p>
-            <button id="confirm-reserve">Sí, Reservar</button>
-            <button id="cancel-reserve">Cancelar</button>
-        </div>
-    </div>
 
     <script>
         let currentIndex = 0;
         const items = document.querySelectorAll('.carousel-item');
         const totalItems = items.length;
+        let selectedRoom = null;
 
         function moveCarousel(direction) {
             currentIndex = (currentIndex + direction + totalItems) % totalItems;
@@ -119,34 +122,108 @@ $mis_reservas = $habitacion->getMisReservas($_SESSION['usuario_id']);
             document.querySelector('.carousel').style.transform = `translateX(${offset}%)`;
         }
 
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
         document.querySelectorAll('.reserve-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                // Desmarcar habitación previamente seleccionada
+                document.querySelectorAll('.carousel-item').forEach(item => item.classList.remove('selected'));
+                document.querySelectorAll('.reserve-btn').forEach(b => b.textContent = 'Seleccionar');
+
+                // Marcar la nueva selección
                 const habitacionId = btn.getAttribute('data-habitacion-id');
+                const numero = btn.getAttribute('data-numero');
+                const tipo = btn.getAttribute('data-tipo');
+                const precio = btn.getAttribute('data-precio');
+                const capacidad = btn.getAttribute('data-capacidad');
+
+                btn.textContent = 'Seleccionada';
+                btn.parentElement.parentElement.classList.add('selected');
+                selectedRoom = { id: habitacionId, numero, tipo, precio, capacidad };
+
+                // Mostrar detalles de la habitación seleccionada
                 document.getElementById('selected-habitacion').value = habitacionId;
-                document.getElementById('modal').style.display = 'block';
+                document.getElementById('selected-numero').textContent = numero;
+                document.getElementById('selected-tipo').textContent = tipo;
+                document.getElementById('selected-precio').textContent = precio;
+                document.getElementById('selected-capacidad').textContent = capacidad;
+                document.getElementById('selected-room').style.display = 'block';
             });
         });
 
-        document.getElementById('confirm-reserve').addEventListener('click', () => {
-            document.getElementById('reservation-form').submit();
-        });
-
-        document.getElementById('cancel-reserve').addEventListener('click', () => {
-            document.getElementById('modal').style.display = 'none';
+        document.getElementById('deselect-room').addEventListener('click', () => {
+            document.querySelectorAll('.carousel-item').forEach(item => item.classList.remove('selected'));
+            document.querySelectorAll('.reserve-btn').forEach(b => b.textContent = 'Seleccionar');
             document.getElementById('selected-habitacion').value = '';
+            document.getElementById('selected-room').style.display = 'none';
+            selectedRoom = null;
         });
 
-        document.querySelector('.close').addEventListener('click', () => {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('selected-habitacion').value = '';
-        });
+        document.getElementById('reservation-form').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', (event) => {
-            if (event.target == document.getElementById('modal')) {
-                document.getElementById('modal').style.display = 'none';
-                document.getElementById('selected-habitacion').value = '';
+            if (!selectedRoom) {
+                showNotification('Por favor selecciona una habitación antes de confirmar.', 'error');
+                return;
             }
+
+            const formData = new FormData(this);
+            fetch('procesar_reserva.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    // Actualizar las reservas dinámicamente
+                    const reservationsSection = document.querySelector('.reservations-section .reservations-list');
+                    const newReservation = document.createElement('div');
+                    newReservation.className = 'reservation-card';
+                    const dias = (new Date(formData.get('fecha_salida')) - new Date(formData.get('fecha_entrada'))) / (1000 * 60 * 60 * 24);
+                    newReservation.innerHTML = `
+                        <h4>Reserva #${data.reserva_id}</h4>
+                        <p>Habitación: ${selectedRoom.numero} - ${selectedRoom.tipo}</p>
+                        <p>Entrada: ${new Date(formData.get('fecha_entrada')).toLocaleDateString('es-ES')}</p>
+                        <p>Salida: ${new Date(formData.get('fecha_salida')).toLocaleDateString('es-ES')}</p>
+                        <p>Total Estimado: $${(selectedRoom.precio * dias).toFixed(2)}</p>
+                        <p>Estado: pendiente</p>
+                    `;
+                    if (reservationsSection) {
+                        reservationsSection.prepend(newReservation);
+                    } else {
+                        const newList = document.createElement('div');
+                        newList.className = 'reservations-list';
+                        newList.appendChild(newReservation);
+                        document.querySelector('.reservations-section').appendChild(newList);
+                        document.querySelector('.reservations-section p').remove();
+                    }
+
+                    // Actualizar carrusel: remover la habitación reservada
+                    const selectedItem = document.querySelector(`.carousel-item[data-id="${selectedRoom.id}"]`);
+                    if (selectedItem) selectedItem.remove();
+                    const remainingItems = document.querySelectorAll('.carousel-item').length;
+                    if (remainingItems === 0) {
+                        document.querySelector('.carousel-container').innerHTML = '<p>No hay habitaciones disponibles en este momento.</p>';
+                    }
+
+                    // Limpiar selección
+                    document.getElementById('selected-room').style.display = 'none';
+                    document.getElementById('selected-habitacion').value = '';
+                    selectedRoom = null;
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error al procesar la solicitud. Inténtalo de nuevo.', 'error');
+            });
         });
 
         // Inicializar carrusel

@@ -30,10 +30,14 @@ class Habitacion {
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param('iiss', $usuario_id, $habitacion_id, $fecha_entrada, $fecha_salida);
         if ($stmt->execute()) {
+            $db = new Conexion(); // Reinstanciar para acceder al insert_id
+            $reserva_id = $db->getLastInsertId();
             $update_sql = "UPDATE habitaciones SET estado = 'ocupada' WHERE id = ?";
             $stmt_update = $this->conexion->prepare($update_sql);
             $stmt_update->bind_param('i', $habitacion_id);
-            return $stmt_update->execute();
+            if ($stmt_update->execute()) {
+                return $reserva_id; // Devolver el ID de la reserva
+            }
         }
         return false;
     }

@@ -1,8 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8;
     overflow-x: hidden;
 }
 
@@ -16,11 +16,13 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     margin: 0;
     font-size: 24px;
+    font-weight: 600;
 }
 
 nav a {
@@ -52,6 +54,7 @@ main h3 {
     font-size: 22px;
     margin-top: 30px;
     position: relative;
+    font-weight: 600;
 }
 
 main h3::after {
@@ -65,11 +68,97 @@ main h3::after {
     background-color: #e76f51;
 }
 
-.reservations-list {
+.add-reservation-section, .reservations-section {
+    margin-bottom: 40px;
+}
+
+.add-reservation-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #264653;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group select, .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group select:focus, .form-group input:focus {
+    outline: none;
+    border-color: #e76f51;
+}
+
+.add-btn {
+    background-color: #2a9d8f;
+    border: none;
+    padding: 12px 24px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-btn:hover {
+    transform: scale(1.05);
+    background-color: #21867a;
+}
+
+.filter-section {
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-section label {
+    font-size: 16px;
+    color: #264653;
+    font-weight: 500;
+}
+
+.filter-section select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.filter-section select:focus {
+    outline: none;
+    border-color: #e76f51;
+}
+
+.reservations-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    flex-wrap: wrap;
+    padding: 0 20px;
 }
 
 .reservation-card {
@@ -77,8 +166,7 @@ main h3::after {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
+    text-align: left;
     transition: transform 0.3s, box-shadow 0.3s;
     animation: slideUp 0.5s ease-out;
 }
@@ -92,21 +180,23 @@ main h3::after {
     font-size: 18px;
     color: #264653;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .reservation-card p {
     font-size: 14px;
     color: #555;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .action-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    justify-content: center;
+    margin-top: 15px;
 }
 
-.action-buttons button {
+.action-btn {
     background-color: #e76f51;
     border: none;
     padding: 8px 16px;
@@ -115,30 +205,65 @@ main h3::after {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.action-buttons button:hover {
+.action-btn:hover {
     background-color: #f4a261;
     transform: scale(1.05);
 }
 
-.cancel-btn {
+.action-btn.asignar {
+    background-color: #2a9d8f;
+}
+
+.action-btn.asignar:hover {
+    background-color: #21867a;
+}
+
+.action-btn.checkin {
+    background-color: #264653;
+}
+
+.action-btn.checkin:hover {
+    background-color: #1e3a47;
+}
+
+.action-btn.checkout {
+    background-color: #f4a261;
+}
+
+.action-btn.checkout:hover {
+    background-color: #e6934f;
+}
+
+.action-btn.cancelar {
     background-color: #e63946;
 }
 
-.cancel-btn:hover {
+.action-btn.cancelar:hover {
     background-color: #d00000;
+}
+
+.action-btn.eliminar {
+    background-color: #6b7280;
+}
+
+.action-btn.eliminar:hover {
+    background-color: #4b5563;
 }
 
 .notification {
     position: fixed;
-    top: 80px; /* Ajustado para que no tape el header */
+    top: 80px;
     right: 20px;
     padding: 15px 20px;
     border-radius: 5px;
     color: #fff;
     font-size: 14px;
-    z-index: 900; /* Menor que el header para que no interfiera */
+    z-index: 900;
     animation: slideInRight 0.5s ease-in, fadeOut 3s 2s forwards;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
