@@ -124,7 +124,7 @@ session_start();
 
         <section id="contact" class="content-section">
             <h2>Contacto</h2>
-            <p>Estamos ubicados en Calle Ficticia 123, Ciudad Paraíso.</p>
+            <p>Estamos ubicados en Calle  123, Ciudad Paraíso.</p>
             <p>Teléfono: +123 456 7890</p>
             <p>Email: info@hotelparaiso.com</p>
         </section>

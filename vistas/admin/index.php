@@ -9,6 +9,8 @@ require_once '../../modelos/Administrador.php';
 $admin = new Administrador();
 $habitaciones = $admin->getHabitaciones();
 $usuarios = $admin->getUsuarios();
+$ingresos = $admin->getIngresosPorReservas();
+$total_ingresos = array_sum(array_column($ingresos, 'total'));
 ?>
 
 <html lang="es">
@@ -100,6 +102,44 @@ $usuarios = $admin->getUsuarios();
                         </div>
                     <?php endforeach; ?>
                 </div>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h3>Reporte de Ingresos</h3>
+            <?php if (isset($_GET['success'])): ?>
+                <div class="notification success"><?php echo htmlspecialchars($_GET['success']); ?></div>
+            <?php elseif (isset($_GET['error'])): ?>
+                <div class="notification error"><?php echo htmlspecialchars($_GET['error']); ?></div>
+            <?php endif; ?>
+            <p>Total de Ingresos: $<?php echo number_format($total_ingresos, 2); ?></p>
+            <div class="report-list">
+                <?php if (empty($ingresos)): ?>
+                    <p>No hay ingresos registrados.</p>
+                <?php else: ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Entrada</th>
+                                <th>Salida</th>
+                                <th>Precio/Noche</th>
+                                <th>Días</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($ingresos as $ingreso): ?>
+                                <tr>
+                                    <td><?php echo date('d/m/Y', strtotime($ingreso['fecha_entrada'])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($ingreso['fecha_salida'])); ?></td>
+                                    <td>$<?php echo number_format($ingreso['precio'], 2); ?></td>
+                                    <td><?php echo $ingreso['dias']; ?></td>
+                                    <td>$<?php echo number_format($ingreso['total'], 2); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
             </div>
         </section>
     </main>

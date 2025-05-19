@@ -7,7 +7,12 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'recepcionista') {
 require_once '../../modelos/Recepcionista.php';
 
 $recepcionista = new Recepcionista();
+$estado_filtro = isset($_GET['estado']) ? $_GET['estado'] : '';
 $reservas = $recepcionista->getReservas();
+
+if ($estado_filtro) {
+    $reservas = array_filter($reservas, fn($r) => $r['estado'] === $estado_filtro);
+}
 ?>
 
 <html lang="es">
@@ -21,13 +26,26 @@ $reservas = $recepcionista->getReservas();
     <header>
         <h1>Panel de Recepcionista</h1>
         <nav>
-            <a href="../../publico/index.php">Inicio</a>
-            <a href="../../auth/logout.php">Cerrar Sesión</a>
+            <a href="../publico/index.php">Inicio</a>
+            <a href="../auth/logout.php">Cerrar Sesión</a>
         </nav>
     </header>
     <main>
         <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Recepcionista'); ?></h2>
         <h3>Gestión de Reservas</h3>
+        <div class="filter-section">
+            <form method="GET" style="margin-bottom: 20px;">
+                <label for="estado">Filtrar por Estado:</label>
+                <select name="estado" id="estado" onchange="this.form.submit()">
+                    <option value="">Todos</option>
+                    <option value="pendiente" <?php echo $estado_filtro === 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                    <option value="asignada" <?php echo $estado_filtro === 'asignada' ? 'selected' : ''; ?>>Asignada</option>
+                    <option value="checkin" <?php echo $estado_filtro === 'checkin' ? 'selected' : ''; ?>>Check-in</option>
+                    <option value="finalizada" <?php echo $estado_filtro === 'finalizada' ? 'selected' : ''; ?>>Finalizada</option>
+                    <option value="cancelada" <?php echo $estado_filtro === 'cancelada' ? 'selected' : ''; ?>>Cancelada</option>
+                </select>
+            </form>
+        </div>
         <?php if (isset($_GET['success'])): ?>
             <div class="notification success"><?php echo htmlspecialchars($_GET['success']); ?></div>
         <?php elseif (isset($_GET['error'])): ?>

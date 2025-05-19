@@ -34,19 +34,25 @@ $mis_reservas = $habitacion->getMisReservas($_SESSION['usuario_id']);
 
         <section class="rooms-section">
             <h3>Habitaciones Disponibles</h3>
-            <div class="rooms-grid">
+            <div class="carousel-container">
                 <?php if (empty($habitaciones)): ?>
                     <p>No hay habitaciones disponibles en este momento.</p>
                 <?php else: ?>
-                    <?php foreach ($habitaciones as $hab): ?>
-                        <div class="room-card" data-id="<?php echo $hab['id']; ?>">
-                            <img src="../../recursos/imagenes/room<?php echo $hab['id']; ?>.jpg" alt="<?php echo $hab['tipo']; ?>">
-                            <h4><?php echo $hab['numero'] . ' - ' . $hab['tipo']; ?></h4>
-                            <p>Precio: $<?php echo $hab['precio']; ?>/noche</p>
-                            <p>Capacidad: <?php echo $hab['capacidad']; ?> personas</p>
-                            <button class="reserve-btn" data-habitacion-id="<?php echo $hab['id']; ?>">Reservar</button>
-                        </div>
-                    <?php endforeach; ?>
+                    <div class="carousel">
+                        <?php foreach ($habitaciones as $hab): ?>
+                            <div class="carousel-item" data-id="<?php echo $hab['id']; ?>">
+                                <img src="../../recursos/imagenes/room<?php echo $hab['id']; ?>.jpg" alt="<?php echo $hab['tipo']; ?>">
+                                <div class="room-info">
+                                    <h4><?php echo $hab['numero'] . ' - ' . $hab['tipo']; ?></h4>
+                                    <p>Precio: $<?php echo $hab['precio']; ?>/noche</p>
+                                    <p>Capacidad: <?php echo $hab['capacidad']; ?> personas</p>
+                                    <button class="reserve-btn" data-habitacion-id="<?php echo $hab['id']; ?>">Seleccionar</button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)">&#10094;</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)">&#10095;</button>
                 <?php endif; ?>
             </div>
         </section>
@@ -82,20 +88,70 @@ $mis_reservas = $habitacion->getMisReservas($_SESSION['usuario_id']);
                             <p>Total Estimado: $<?php echo $reserva['precio'] * (strtotime($reserva['fecha_salida']) - strtotime($reserva['fecha_entrada'])) / (60 * 60 * 24); ?></p>
                             <p>Estado: <?php echo $reserva['estado']; ?></p>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                    </div>
+                <?php endforeach; ?>
             <?php endif; ?>
         </section>
     </main>
 
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Confirmar Selección</h3>
+            <p>¿Desea reservar esta habitación?</p>
+            <button id="confirm-reserve">Sí, Reservar</button>
+            <button id="cancel-reserve">Cancelar</button>
+        </div>
+    </div>
+
     <script>
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+
+        function moveCarousel(direction) {
+            currentIndex = (currentIndex + direction + totalItems) % totalItems;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const offset = -currentIndex * 100 / 3; // Ajuste para 3 items visibles
+            document.querySelector('.carousel').style.transform = `translateX(${offset}%)`;
+        }
+
         document.querySelectorAll('.reserve-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const habitacionId = btn.getAttribute('data-habitacion-id');
                 document.getElementById('selected-habitacion').value = habitacionId;
-                alert('Habitación seleccionada: ' + habitacionId);
+                document.getElementById('modal').style.display = 'block';
             });
         });
+
+        document.getElementById('confirm-reserve').addEventListener('click', () => {
+            document.getElementById('reservation-form').submit();
+        });
+
+        document.getElementById('cancel-reserve').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('selected-habitacion').value = '';
+        });
+
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('selected-habitacion').value = '';
+        });
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', (event) => {
+            if (event.target == document.getElementById('modal')) {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('selected-habitacion').value = '';
+            }
+        });
+
+        // Inicializar carrusel
+        updateCarousel();
+        setInterval(() => moveCarousel(1), 5000); // Auto-scroll cada 5 segundos
     </script>
 </body>
 </html>

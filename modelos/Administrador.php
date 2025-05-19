@@ -46,5 +46,18 @@ class Administrador {
         $stmt->bind_param('i', $id);
         return $stmt->execute();
     }
+
+    public function getIngresosPorReservas() {
+        $sql = "SELECT 
+                    r.fecha_entrada, 
+                    r.fecha_salida, 
+                    h.precio, 
+                    DATEDIFF(r.fecha_salida, r.fecha_entrada) AS dias,
+                    (h.precio * DATEDIFF(r.fecha_salida, r.fecha_entrada)) AS total
+                FROM reservas r 
+                JOIN habitaciones h ON r.habitacion_id = h.id 
+                WHERE r.estado = 'finalizada'";
+        return $this->conexion->query($sql)->fetch_all(MYSQLI_ASSOC);
+    }
 }
 ?>
